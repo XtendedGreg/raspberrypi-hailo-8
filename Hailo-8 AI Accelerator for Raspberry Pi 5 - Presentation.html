@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hailo-8 AI on Raspberry Pi 5</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+       .presentation {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+       .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+            background-color: #1e1e1e;
+        }
+       .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 1;
+        }
+       .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            height: 90%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 3.5em;
+            color: #bb86fc;
+            text-align: center;
+            margin-bottom: 0.2em;
+        }
+        h2 {
+            font-size: 2.5em;
+            color: #03dac6;
+            border-bottom: 2px solid #03dac6;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.8em;
+            color: #cf6679;
+            margin-top: 30px;
+        }
+        p, li {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+        ul {
+            list-style-type: square;
+            padding-left: 40px;
+        }
+        code {
+            background-color: #333;
+            color: #f0f0f0;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 1.1em;
+        }
+        pre code {
+            padding: 0;
+            background-color: transparent;
+        }
+       .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+       .nav-btn {
+            background-color: #bb86fc;
+            color: #121212;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+       .nav-btn:hover {
+            background-color: #9e66d4;
+        }
+       .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            font-size: 1.2em;
+            color: #aaa;
+            background-color: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+       .title-slide {
+            text-align: center;
+        }
+       .title-slide h1 {
+            font-size: 4.5em;
+        }
+       .title-slide .subtitle {
+            font-size: 2em;
+            color: #e0e0e0;
+            border: none;
+            margin-top: 0;
+        }
+        .title-slide .byline {
+            font-size: 1.2em;
+            color: #aaa;
+            margin-top: 40px;
+        }
+       .side-by-side {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 20px;
+        }
+       .side-by-side > div {
+            flex: 1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #03dac6;
+            font-size: 1.1em;
+        }
+        td {
+            background-color: #2a2a2a;
+        }
+       .final-slide a {
+            color: #bb86fc;
+            text-decoration: none;
+       }
+       .final-slide a:hover {
+            text-decoration: underline;
+       }
+    </style>
+</head>
+<body>
+
+<div class="presentation">
+
+    <!-- Slide 0: Title -->
+    <div class="slide active" id="slide-0">
+        <div class="slide-content title-slide">
+            <h1>Supercharging the Raspberry Pi 5</h1>
+            <p class="subtitle">A Deep Dive into the Hailo-8 AI Coprocessor</p>
+            <img src="https://www.waveshare.com/img/devkit/accBoard/Raspberry-Pi-AI-Kit/Raspberry-Pi-AI-Kit-details-3.jpg" alt="Raspberry Pi 5 with Hailo-8 AI Accelerator">
+            <p class="byline">youtube.com/@XtendedGreg<br />#NotSponsored</p>
+        </div>
+    </div>
+
+    <!-- Slide 1: Introduction -->
+    <div class="slide" id="slide-1">
+        <div class="slide-content">
+            <h2>The New Era of Edge AI</h2>
+            <p>Edge AI means running artificial intelligence algorithms locally on a device, right where data is collected. This avoids sending data to a remote cloud server for processing.</p>
+            <h3>Cloud AI vs. Edge AI</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Cloud AI</th>
+                        <th>Edge AI (Pi 5 + Hailo-8)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Latency</strong></td>
+                        <td>High (dependent on network)</td>
+                        <td><strong>Very Low</strong> (instant, on-device)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Privacy</strong></td>
+                        <td>Lower (sensitive data is sent off-site)</td>
+                        <td><strong>High</strong> (data never leaves the device)</td>
+                    </tr>
+                     <tr>
+                        <td><strong>Bandwidth</strong></td>
+                        <td>High (requires constant data upload)</td>
+                        <td><strong>Very Low</strong> (only results are sent, if any)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reliability</strong></td>
+                        <td>Lower (requires stable internet)</td>
+                        <td><strong>High</strong> (works completely offline)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 2: Hardware Overview -->
+    <div class="slide" id="slide-2">
+        <div class="slide-content">
+            <h2>The Hardware: A Perfect Match</h2>
+            <div class="side-by-side">
+                <div>
+                    <h3>Raspberry Pi 5</h3>
+                    <ul>
+                        <li><strong>CPU:</strong> 2.4GHz quad-core 64-bit Arm Cortex-A76</li>
+                        <li><strong>GPU:</strong> VideoCore VII GPU</li>
+                        <li><strong>RAM:</strong> 4GB or 8GB LPDDR4X</li>
+                        <li><strong>Key Feature:</strong> A <strong>PCIe 3.0 x1 interface</strong>. This high-speed connection is what allows the Pi to communicate effectively with the Hailo-8 accelerator.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Hailo-8 AI Accelerator</h3>
+                    <ul>
+                        <li><strong>Form Factor:</strong> M.2 Key-M</li>
+                        <li><strong>Performance:</strong> Up to <strong>26 Tera-Operations Per Second (TOPS)</strong></li>
+                        <li><strong>Power Efficiency:</strong> Averages only 2.5W</li>
+                        <li><strong>Purpose:</strong> A specialized chip built from the ground up to run neural networks efficiently, delivering data-center performance in a tiny package.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 3: Why a Coprocessor? -->
+    <div class="slide" id="slide-3">
+        <div class="slide-content">
+            <h2>Why Use a Dedicated AI Coprocessor?</h2>
+            <h3>CPU vs. Hailo-8 for AI Tasks</h3>
+            <p>A CPU is a generalist, but AI workloads are specialist tasks involving millions of repetitive math calculations. A dedicated Neural Processing Unit (NPU) like the Hailo-8 is built specifically for this job.</p>
+            <div class="side-by-side">
+                <div>
+                    <h4>Running AI on the CPU</h4>
+                    <ul>
+                        <li>High CPU utilization (can reach 100%).</li>
+                        <li>Slower inference speeds (low frames per second).</li>
+                        <li>Consumes more power for the same task.</li>
+                        <li>System becomes unresponsive as the CPU is bogged down.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Offloading AI to Hailo-8</h4>
+                    <ul>
+                        <li>Very low CPU utilization (often < 5%).</li>
+                        <li>Massively faster inference speeds (real-time performance).</li>
+                        <li>Extremely power efficient (high TOPS/Watt).</li>
+                        <li>Frees up the CPU for the OS and other application logic.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Real-World Applications -->
+    <div class="slide" id="slide-4">
+        <div class="slide-content">
+            <h2>What Can You Do With It? Applications</h2>
+            <p>This powerful combination enables sophisticated AI applications right at the edge.</p>
+            <div class="side-by-side">
+                <div>
+                    <h3>Commercial & Industrial</h3>
+                    <ul>
+                        <li><strong>Smart Cities:</strong> Real-time traffic analysis, license plate recognition, and smart parking.</li>
+                        <li><strong>Retail Analytics:</strong> Anonymous customer tracking for heatmaps, shelf stock monitoring, and queue management.</li>
+                        <li><strong>Industrial Automation:</strong> Visual quality control on assembly lines, safety gear detection, and predictive maintenance alerts.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Home & Hobbyist</h3>
+                    <ul>
+                        <li><strong>Advanced Home Security:</strong> On-device person, package, and vehicle detection without subscription fees.</li>
+                        <li><strong>Robotics & Drones:</strong> Autonomous navigation and intelligent object recognition for personal projects.</li>
+                        <li><strong>Creative Projects:</strong> Real-time gesture recognition interfaces, smart wildlife cameras that identify species, and more.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Software Installation -->
+    <div class="slide" id="slide-5">
+        <div class="slide-content">
+            <h2>Getting Started: Easy Installation</h2>
+            <h3>The Magic of Native Raspberry Pi OS Repositories</h3>
+            <p>Thanks to the partnership between Raspberry Pi and Hailo, the necessary software is included directly in the Raspberry Pi OS repositories. This makes installation incredibly simple.</p>
+            
+            <h3>Step 1: Update Your System</h3>
+            <p>First, ensure your system is up to date to get the latest packages and ensure compatibility.</p>
+            <pre><code>sudo apt update
+sudo apt full-upgrade -y</code></pre>
+            
+            <h3>Step 2: Install the Hailo Software Stack</h3>
+            <p>This single command installs the driver, runtime libraries, firmware, and other tools.</p>
+            <pre><code>sudo apt install -y hailo-all</code></pre>
+			<h3>Step 3: Enable PCIe Interface and Reboot</h3>
+            <p>This will enable the PCIe x1 interface at gen 3.0 speeds.</p>
+            <pre><code>sudo raspi-config
+	# Select Advanced Options
+	# Select PCIe speed
+	# Select 'Yes' and press enter
+	# Select 'Finished' and reboot when prompted</code></pre>
+        </div>
+    </div>
+
+    <!-- Slide 6: Running the Examples -->
+    <div class="slide" id="slide-6">
+        <div class="slide-content">
+            <h2>Running the Hailo Examples</h2>
+            <h3>Step 3: Clone the Hailo Applications Repo</h3>
+            <p>Hailo provides a GitHub repository with a wide range of pre-built examples that are ready to run. Clone this repository to your home directory.</p>
+            <pre><code>git clone https://github.com/hailo-ai/hailo-rpi5-examples.git</code></pre>
+            
+            <h3>Step 4: Run an Object Detection Demo</h3>
+            <p>Navigate into the directory and run a real-time object detection demo for a connected USB camera.</p>
+            <pre><code>cd hailo-rpi5-examples
+./install.sh
+source setup_env.sh
+python basic_pipelines/detection_simple.py -i usb</code></pre>
+            <p>This script will access a connected camera (like a Pi Camera Module or USB webcam) and open a window showing the video feed with bounding boxes and labels drawn around detected objects in real-time!</p>
+        </div>
+    </div>
+
+    <!-- Slide 7: Conclusion -->
+    <div class="slide" id="slide-7">
+        <div class="slide-content">
+            <h2>Conclusion & Key Takeaways</h2>
+            <ul>
+                <li>
+                    <h3>A Paradigm Shift for Edge AI</h3>
+                    <p>The Raspberry Pi 5 and Hailo-8 combination brings <strong>data-center class AI performance</strong> to a small, affordable, and power-efficient platform.</p>
+                </li>
+                 <li>
+                    <h3>Incredibly Accessible</h3>
+                    <p><strong>Seamless software integration</strong> via the Raspberry Pi OS repository removes the complex setup process, making powerful AI accessible to everyone.</p>
+                </li>
+                 <li>
+                    <h3>Limitless Potential</h3>
+                    <p>This unlocks a vast range of possibilities for <strong>real-time, private, and reliable AI applications</strong> previously out of reach for hobbyists and small businesses.</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 8: Q&A and Resources -->
+    <div class="slide" id="slide-8">
+        <div class="slide-content final-slide">
+            <h1>Thank You!</h1>
+            <h2>Questions & Resources</h2>
+            <p>Explore more about this technology:</p>
+            <ul>
+                <li><strong>Raspberry Pi:</strong> <a href="https://www.raspberrypi.com/" target="_blank">https://www.raspberrypi.com/</a></li>
+                <li><strong>Hailo AI:</strong> <a href="https://hailo.ai/" target="_blank">https://hailo.ai/</a></li>
+                <li><strong>Hailo RPi Apps Repo:</strong> <a href="https://github.com/hailo-ai/hailo-rpi5-apps" target="_blank">https://github.com/hailo-ai/hailo-rpi5-apps</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<div class="slide-counter" id="slide-counter">1 / 9</div>
+
+<div class="navigation">
+    <button class="nav-btn" id="prevBtn">Previous</button>
+    <button class="nav-btn" id="nextBtn">Next</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.slide');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const slideCounter = document.getElementById('slide-counter');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function updateSlideCounter() {
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(slideIndex) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (slideIndex + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            updateSlideCounter();
+        }
+
+        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault(); 
+                showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault(); 
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        // Initialize
+        updateSlideCounter();
+    });
+</script>
+
+</body>
+</html>
+
