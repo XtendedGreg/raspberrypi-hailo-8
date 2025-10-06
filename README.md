@@ -1,6 +1,7 @@
 # **Real-Time AI on a Raspberry Pi 5 with the Hailo-8 Accelerator**
+Written by: XtendedGreg August 25, 2025 [XtendedGreg Youtube Channel](https://www.youtube.com/@xtendedgreg)
 
-\!
+[![Watch the video](https://img.youtube.com/vi/6sSZ80Nt0ik/maxresdefault.jpg)](https://youtube.com/live/6sSZ80Nt0ik)
 
 This repository contains the resources for a presentation and report on how to supercharge a Raspberry Pi 5 with a dedicated AI coprocessor, enabling incredible performance for real-time artificial intelligence projects.
 
